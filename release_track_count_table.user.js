@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Discogs Release Track Count Table
 // @namespace    https://github.com/akeldama0435/discogs
-// @version      1.9
-// @description  Collapsible, sortable table of all master versions with parallel fetching for track counts and year, search, and release links.
-// @author       Akeldama
+// @version      1.10
+// @description  Collapsible, sortable table of all master versions with track counts and year, search, and release links. Inserted after specific button div on master pages.
+// @author       -
 // @match        https://www.discogs.com/master/*
 // @grant        GM_xmlhttpRequest
 // @connect      api.discogs.com
@@ -27,6 +27,7 @@
         overlay.style.fontFamily = 'Arial, sans-serif';
         overlay.style.margin = '20px 0';
 
+        // Collapsible header
         const header = document.createElement('div');
         header.style.fontWeight = 'bold';
         header.style.cursor = 'pointer';
@@ -38,6 +39,7 @@
         });
         overlay.appendChild(header);
 
+        // Search input
         searchInput = document.createElement('input');
         searchInput.type = 'text';
         searchInput.placeholder = 'Filter by title, country, year...';
@@ -49,6 +51,7 @@
         searchInput.addEventListener('input', () => filterTable(searchInput.value));
         overlay.appendChild(searchInput);
 
+        // Table
         table = document.createElement('table');
         table.style.width = '100%';
         table.style.borderCollapse = 'collapse';
@@ -75,11 +78,12 @@
         table.appendChild(tbody);
         overlay.appendChild(table);
 
+        // Insert after the specified button div
         const anchor = document.querySelector('button._dense_yjcsc_54:nth-child(1) > div:nth-child(1)');
         if (anchor && anchor.parentElement) {
             anchor.parentElement.insertAdjacentElement('afterend', overlay);
         } else {
-            document.body.appendChild(overlay);
+            document.body.appendChild(overlay); // fallback
         }
 
         return overlay;
@@ -126,6 +130,7 @@
         });
     }
 
+    // Fetch release info for track count and year
     function fetchReleaseData(releaseId) {
         return new Promise((resolve) => {
             GM_xmlhttpRequest({
@@ -152,9 +157,7 @@
         tbody.innerHTML = '';
         try {
             const versions = await fetchMasterVersions(masterId);
-
-            // Create table rows first
-            const rows = versions.map(v => {
+            for (const v of versions) {
                 const tr = document.createElement('tr');
                 tr.style.borderBottom = '1px solid #eee';
 
@@ -181,18 +184,11 @@
                 tr.append(tdRelease, tdCountry, tdYear, tdTracks);
                 tbody.appendChild(tr);
 
-                return {tr, releaseId: v.id, tdYear, tdTracks};
-            });
-
-            // Fetch all release data in parallel
-            const promises = rows.map(r => fetchReleaseData(r.releaseId));
-            const results = await Promise.all(promises);
-
-            results.forEach((data, idx) => {
-                rows[idx].tdYear.textContent = data.year;
-                rows[idx].tdTracks.textContent = data.tracks;
-            });
-
+                // Fetch release data for track count and year
+                const releaseData = await fetchReleaseData(v.id);
+                tdTracks.textContent = releaseData.tracks;
+                tdYear.textContent = releaseData.year;
+            }
         } catch (err) {
             tbody.innerHTML = `<tr><td colspan="4">Error: ${err}</td></tr>`;
             console.error(err);
