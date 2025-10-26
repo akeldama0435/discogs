@@ -3,7 +3,7 @@
 // @namespace    https://github.com/akeldama0435/discogs
 // @version      1.9
 // @description  Collapsible, sortable table of all master versions with parallel fetching for track counts and year, search, and release links.
-// @author       You
+// @author       Akeldama
 // @match        https://www.discogs.com/master/*
 // @grant        GM_xmlhttpRequest
 // @connect      api.discogs.com
