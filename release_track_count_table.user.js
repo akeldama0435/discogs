@@ -3,6 +3,8 @@
 // @namespace    https://github.com/akeldama0435/discogs
 // @version      1.5
 // @description  Scrollable table, sortable, searchable, lazy-loading releases, width matches #release-tracklist > div:nth-child(2), fallback to DOM year.
+// @updateURL    https://github.com/akeldama0435/discogs/blob/main/release_track_count_table.user.js
+// @downloadURL  https://github.com/akeldama0435/discogs/blob/main/release_track_count_table.user.js
 // @author       Akeldama
 // @match        https://www.discogs.com/master/*
 // @grant        GM_xmlhttpRequest
