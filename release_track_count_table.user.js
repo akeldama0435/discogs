@@ -6,6 +6,7 @@
 // @updateURL    https://github.com/akeldama0435/discogs/blob/main/release_track_count_table.user.js
 // @downloadURL  https://github.com/akeldama0435/discogs/blob/main/release_track_count_table.user.js
 // @author       Akeldama
+// @aiassisted
 // @icon         https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCIMipZ-1QZL0oouXnJdqVCRtY3GuEcGPX8g&s
 // @match        https://www.discogs.com/master/*
 // @grant        GM_xmlhttpRequest
